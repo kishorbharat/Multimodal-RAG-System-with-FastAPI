@@ -23,7 +23,7 @@ class Settings:
     )
     llm_provider: str = os.getenv("LLM_PROVIDER", "openai_or_local")
     openai_model: str = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-    local_llm_model: str = os.getenv("LOCAL_LLM_MODEL", "google/flan-t5-base")
+    local_llm_model: str = os.getenv("LOCAL_LLM_MODEL", "Qwen/Qwen2.5-0.5B-Instruct")
     retrieval_k: int = int(os.getenv("RETRIEVAL_K", "6"))
     enable_ocr_fallback: bool = os.getenv("ENABLE_OCR_FALLBACK", "true").lower() == "true"
     ocr_dpi: int = int(os.getenv("OCR_DPI", "220"))

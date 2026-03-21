@@ -21,13 +21,13 @@ curl -X POST "http://localhost:8000/query" \
   "answer": "<LLM-generated answer synthesized from retrieved text chunks>",
   "sources": [
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 42,
       "chunk_type": "text",
       "chunk_index": 3
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 45,
       "chunk_type": "text",
       "chunk_index": 1
@@ -60,13 +60,13 @@ curl -X POST "http://localhost:8000/query" \
   "answer": "<LLM-generated answer referencing table data>",
   "sources": [
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 38,
       "chunk_type": "table",
       "chunk_index": 1
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 40,
       "chunk_type": "table",
       "chunk_index": 2
@@ -99,19 +99,19 @@ curl -X POST "http://localhost:8000/query" \
   "answer": "<LLM-generated answer based on VLM image summaries>",
   "sources": [
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 15,
       "chunk_type": "image_summary",
       "chunk_index": 1
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 28,
       "chunk_type": "image_summary",
       "chunk_index": 2
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 35,
       "chunk_type": "image_summary",
       "chunk_index": 1
@@ -127,14 +127,14 @@ curl -X POST "http://localhost:8000/query" \
 
 ---
 
-## Verified Test Run (Sample PDF: AIS 175)
+## Verified Test Run (Current Sample PDF)
 
-The following demonstrates a successful query execution on the sample AIS-175 PDF:
+The following demonstrates a successful query execution on the current sample PDF:
 
 **Query:**
 ```json
 {
-  "question": "What does AIS-175 focus on?"
+  "question": "What does this document focus on?"
 }
 ```
 
@@ -144,37 +144,37 @@ The following demonstrates a successful query execution on the sample AIS-175 PD
   "answer": "document QA",
   "sources": [
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 175,
       "chunk_type": "image_summary",
       "chunk_index": 1
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 492,
       "chunk_type": "image_summary",
       "chunk_index": 10
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 123,
       "chunk_type": "image_summary",
       "chunk_index": 1
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 166,
       "chunk_type": "image_summary",
       "chunk_index": 2
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 249,
       "chunk_type": "image_summary",
       "chunk_index": 1
     },
     {
-      "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+      "filename": "AIS_197-1_BNCAP.pdf",
       "page": 422,
       "chunk_type": "image_summary",
       "chunk_index": 1
@@ -184,7 +184,7 @@ The following demonstrates a successful query execution on the sample AIS-175 PD
 ```
 
 **Notes:**
-- The sample AIS-175 PDF is image-heavy; all indexed chunks are image summaries (176 total)
+- The current sample PDF is image-heavy; all indexed chunks are image summaries (176 total)
 - Retriever successfully returns top-6 most similar image-summary chunks
 - Sources provide full traceability: filename, page number, chunk type, and chunk index
 - LLM synthesizes answer from retrieved image descriptions
@@ -207,7 +207,7 @@ The following demonstrates a successful query execution on the sample AIS-175 PD
 3. **Ingest a Sample PDF:**
    ```bash
    curl -X POST "http://localhost:8000/ingest" \
-     -F "file=@sample_documents/AIS 175_Final Draft_MARCH_2025.pdf"
+     -F "file=@sample_documents/AIS_197-1_BNCAP.pdf"
    ```
 
 4. **Run Test Queries:**

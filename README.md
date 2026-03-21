@@ -143,14 +143,14 @@ Sample curl:
 
 ```bash
 curl -X POST "http://localhost:8000/ingest" \
-    -F "file=@sample_documents/AIS 175_Final Draft_MARCH_2025.pdf"
+    -F "file=@sample_documents/AIS_197-1_BNCAP.pdf"
 ```
 
 Sample response:
 
 ```json
 {
-    "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+    "filename": "AIS_197-1_BNCAP.pdf",
     "text_chunks": 110,
     "table_chunks": 17,
     "image_summary_chunks": 9,
@@ -177,13 +177,13 @@ Sample response:
     "answer": "The retrieved sections define battery-related safety constraints including ...",
     "sources": [
         {
-            "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+            "filename": "AIS_197-1_BNCAP.pdf",
             "page": 38,
             "chunk_type": "table",
             "chunk_index": 1
         },
         {
-            "filename": "AIS 175_Final Draft_MARCH_2025.pdf",
+            "filename": "AIS_197-1_BNCAP.pdf",
             "page": 41,
             "chunk_type": "text",
             "chunk_index": 2
@@ -191,6 +191,8 @@ Sample response:
     ]
 }
 ```
+
+The repository currently includes [sample_documents/AIS_197-1_BNCAP.pdf](/workspaces/Multimodal-RAG-System-with-FastAPI/sample_documents/AIS_197-1_BNCAP.pdf) as the sample document. Replace the file path in the curl command if you add a different PDF.
 
 ### GET /docs
 FastAPI auto-generated OpenAPI/Swagger UI.

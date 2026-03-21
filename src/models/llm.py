@@ -13,14 +13,21 @@ class LocalFallbackChatModel:
 
     def __init__(self, model_name: str) -> None:
         from langchain_huggingface import HuggingFacePipeline
-        from transformers import pipeline
+        from transformers import AutoConfig, pipeline
 
-        pipe = pipeline(
-            "text2text-generation",
-            model=model_name,
-            max_new_tokens=512,
-            do_sample=False,
-        )
+        config = AutoConfig.from_pretrained(model_name)
+        task = "text2text-generation" if config.is_encoder_decoder else "text-generation"
+
+        pipe_kwargs = {
+            "task": task,
+            "model": model_name,
+            "max_new_tokens": 512,
+            "do_sample": False,
+        }
+        if task == "text-generation":
+            pipe_kwargs["return_full_text"] = False
+
+        pipe = pipeline(**pipe_kwargs)
         self._llm = HuggingFacePipeline(pipeline=pipe)
 
     def invoke(self, prompt: str):

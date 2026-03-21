@@ -13,6 +13,9 @@ RAG_PROMPT_TEMPLATE = """You are a grounded assistant for multimodal document QA
 Use only the provided context to answer the question.
 If the answer is missing from context, say that explicitly.
 Do not fabricate values.
+Write the answer in clear, human-readable language.
+Do not copy large table fragments verbatim.
+Summarize extracted values and conditions instead of repeating raw rows.
 
 Question:
 {question}
@@ -58,10 +61,36 @@ class RAGChain:
     @staticmethod
     def _format_context(docs: List[Document]) -> str:
         lines: List[str] = []
+        seen: set[tuple[str, int, str, int]] = set()
+        total_chars = 0
+        max_total_chars = 6000
+
         for i, doc in enumerate(docs, start=1):
             meta = doc.metadata
-            lines.append(
-                f"[{i}] source={meta.get('source')} page={meta.get('page')} type={meta.get('chunk_type')} "
-                f"idx={meta.get('chunk_index')}\n{doc.page_content}\n"
+            ref = (
+                str(meta.get("source", "unknown")),
+                int(meta.get("page", -1)),
+                str(meta.get("chunk_type", "unknown")),
+                int(meta.get("chunk_index", -1)),
             )
+            if ref in seen:
+                continue
+            seen.add(ref)
+
+            content = " ".join(str(doc.page_content).split())
+            content = content[:800]
+            if len(content) == 800:
+                content += " ..."
+
+            chunk = (
+                f"[{i}] source={meta.get('source')} page={meta.get('page')} "
+                f"type={meta.get('chunk_type')} idx={meta.get('chunk_index')}\n{content}\n"
+            )
+            if total_chars + len(chunk) > max_total_chars:
+                break
+
+            lines.append(
+                chunk
+            )
+            total_chars += len(chunk)
         return "\n".join(lines)
