@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment and secrets
+.env
+
+# Local vector store / runtime data
+data/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# OS/editor
+.DS_Store
+.vscode/
