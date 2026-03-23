@@ -233,27 +233,18 @@ FastAPI auto-generated OpenAPI/Swagger UI.
 
 ## 11. Screenshots
 
-Place screenshots in the `screenshots/` folder and embed them here.
+Screenshot files are not committed yet. Add them under `screenshots/` before final submission.
 
 Required evidence:
 
-1. Swagger UI
-![Swagger UI](screenshots/swagger-ui.png)
+1. `swagger-ui.png` - `/docs` page showing endpoints
+2. `ingest-success.png` - successful `POST /ingest` response
+3. `query-text.png` - query result grounded in text chunks
+4. `query-table.png` - query result grounded in table chunks
+5. `query-image.png` - query result grounded in image-summary chunks
+6. `health-response.png` - `GET /health` response with indexed counts
 
-2. Successful Ingestion
-![Ingest Success](screenshots/ingest-success.png)
-
-3. Text Query Result
-![Text Query](screenshots/query-text.png)
-
-4. Table Query Result
-![Table Query](screenshots/query-table.png)
-
-5. Image Query Result
-![Image Query](screenshots/query-image.png)
-
-6. Health Endpoint
-![Health Endpoint](screenshots/health-response.png)
+See [screenshots/README.md](/workspaces/Multimodal-RAG-System-with-FastAPI/screenshots/README.md) for the screenshot checklist.
 
 ## 12. Limitations & Future Work
 
