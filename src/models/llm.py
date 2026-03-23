@@ -12,17 +12,24 @@ class LocalFallbackChatModel:
     """Simple wrapper over transformers text2text pipeline with a chat-like invoke API."""
 
     def __init__(self, model_name: str) -> None:
+        import torch
         from langchain_huggingface import HuggingFacePipeline
         from transformers import AutoConfig, pipeline
 
+        from src.config import settings
+
         config = AutoConfig.from_pretrained(model_name)
         task = "text2text-generation" if config.is_encoder_decoder else "text-generation"
+        device = settings.device
 
         pipe_kwargs = {
             "task": task,
             "model": model_name,
             "max_new_tokens": 512,
             "do_sample": False,
+            "device": device,
+            # fp16 on CUDA (T4 / A100) halves VRAM and speeds up inference
+            "torch_dtype": torch.float16 if device == "cuda" else torch.float32,
         }
         if task == "text-generation":
             pipe_kwargs["return_full_text"] = False

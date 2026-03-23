@@ -18,6 +18,7 @@ class IngestResponse(BaseModel):
     text_chunks: int
     table_chunks: int
     image_summary_chunks: int
+    images_extracted: int = 0
     total_chunks: int
     processing_time_seconds: float
 
@@ -42,3 +43,15 @@ class DocumentsResponse(BaseModel):
     documents: List[str]
     indexed_documents: int
     index_size: int
+
+
+class ImageMetadata(BaseModel):
+    id: str
+    filename: str
+    page: int
+    format: str
+
+
+class ImagesListResponse(BaseModel):
+    images: List[ImageMetadata]
+    total: int

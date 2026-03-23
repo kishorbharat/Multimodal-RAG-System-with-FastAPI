@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 
 from src.config import settings
+from src.ingestion.image_extractor import ImageExtractor
 from src.ingestion.pdf_parser import PDFParser
 from src.ingestion.service import IngestionService
 from src.models.llm import load_llm
@@ -26,6 +27,7 @@ class AppSystem:
             vector_manager=self.vector_manager,
             vision_summarizer=self.vision,
         )
+        self.image_extractor = ImageExtractor()
         self.rag_chain = RAGChain(vector_manager=self.vector_manager, llm=self.llm)
 
     def readiness(self) -> dict:

@@ -1,17 +1,47 @@
 # Multimodal RAG System with FastAPI
 
 ## 6. Problem Statement
-Modern engineering and compliance teams work with PDF-heavy documentation where critical information is spread across paragraphs, structured tables, and visual artifacts such as charts and diagrams. In the automotive domain, AIS-175 is a strong example of this challenge. A single regulatory document can include legal language, threshold values in tabular form, and visual flow-like diagrams that are difficult to query quickly. Traditional keyword search across raw PDFs is often inadequate because it cannot reliably preserve context, cannot reason over related chunks, and cannot account for multimodal evidence in a grounded answer.
 
-This project addresses that gap by implementing a multimodal Retrieval-Augmented Generation (RAG) system exposed through FastAPI. The system ingests a PDF, separates content by modality (text, table, image), converts each modality into retrievable semantic chunks, and answers user questions using only retrieved evidence. The target outcome is a practical API that supports compliance workflows such as: extracting limits from tabular sections, clarifying definitions from paragraphs, and describing the meaning of visual content in diagrams.
+### 1) Domain Identification
+This project is positioned in automotive regulatory compliance and homologation engineering. Typical users include OEM compliance teams, test engineers, certification agencies, and quality/governance stakeholders who work with AIS, CMVR, and Bharat NCAP standards.
 
-The core issue in multimodal PDF question answering is not only retrieval quality but representation fidelity. Text can usually be chunked and embedded directly. Tables, however, lose meaning when flattened naively, so this system preserves tabular structure in Markdown-like form before embedding. Images introduce a larger issue: a vector database cannot directly embed binary image files in a way that supports natural-language retrieval with textual questions. To solve this, each extracted image is passed through a Vision Language Model (VLM) to generate a textual summary containing the salient visible entities, labels, and relationships. These image summaries are then embedded like other chunks, allowing image-derived evidence to participate in standard semantic retrieval.
+### 2) Problem Description
+Automotive regulations are commonly distributed as large multimodal PDF files where critical information is fragmented across:
+- legal and technical text clauses,
+- parameter-heavy tables with limits, exceptions, and notes,
+- complex nomenclatures and abbreviations,
+- process-flow diagrams and annexure cross-references.
 
-Grounding is a first-class design objective. The query endpoint returns both an answer and explicit source references containing filename, page number, and chunk type. This helps evaluators and end users verify whether a response came from text, tables, or image summaries, and supports auditing for high-stakes domains where hallucinations are unacceptable. The prompt used by the generation step is custom-written to enforce grounded behavior, instructing the model to use only retrieved context and to admit when information is missing.
+Users struggle to answer practical questions quickly (for example, what limit applies under a given test condition, or which step is next in a certification flow) because traditional keyword search cannot reliably connect related evidence across text, tables, and visual components.
 
-The assignment also requires reproducibility and maintainability. This repository is structured into modular source packages for ingestion, retrieval, model wrappers, and API routing. Dependencies are pinned, environment variables are documented in `.env.example`, and endpoints are exposed with OpenAPI/Swagger through FastAPI. The architecture supports extension in several ways: alternative vector stores, stronger embedding models, production-grade OCR/table extraction pipelines, and domain-specific prompting.
+### 3) Why This Problem Is Unique
+This is not a generic document Q and A problem. The automotive standards setting introduces domain-specific complexity:
+- specialized terminology and coded references,
+- strict dependence on numeric thresholds and conditional clauses,
+- decision logic expressed in process flows and annexures,
+- safety-critical and compliance-critical consequences when interpretation is wrong.
 
-In summary, this project solves a realistic enterprise problem: turning static multimodal PDF knowledge into an operational question-answering API with verifiable citations. It is designed to be transparent, reproducible, and rubric-aligned, while remaining flexible enough for future improvements in retrieval precision, model quality, and scale.
+A valid answer often requires combining evidence from multiple modalities and multiple pages, not just matching one paragraph.
+
+### 4) Why RAG Is the Right Approach
+Retrieval-Augmented Generation (RAG) is preferable here because regulations change over time and answers must remain grounded in source documents:
+- better than manual reading: faster cross-document and cross-modality lookup,
+- better than keyword search: semantic retrieval handles terminology variations,
+- better than fine-tuning-only approaches: updated PDFs can be re-ingested without retraining,
+- better for audits: answers include citations (filename, page, chunk type) for traceability.
+
+The system therefore balances flexibility, maintainability, and evidence-backed responses for high-stakes compliance workflows.
+
+### 5) Expected Outcomes
+A successful system should enable users to ask natural-language questions and receive grounded answers supported by source references from text, table, and image-summary chunks.
+
+It should support queries such as:
+- What are the adult occupant protection criteria and scoring sections?
+- Which table defines thresholds for a specific test condition?
+- What does a given process-flow diagram indicate about test/certification sequence?
+- Which annexure and clause apply to a specific vehicle category or exception?
+
+It should support decisions such as test planning, compliance gap assessment, homologation readiness checks, and regulator/audit reporting with transparent evidence.
 
 ## 7. Architecture Overview
 

@@ -6,6 +6,7 @@ from pathlib import Path
 
 from fastapi import UploadFile
 
+from src.ingestion.image_extractor import ImageExtractor
 from src.ingestion.pdf_parser import PDFParser
 
 
@@ -14,6 +15,7 @@ class IngestionService:
         self.parser = parser
         self.vector_manager = vector_manager
         self.vision_summarizer = vision_summarizer
+        self.image_extractor = ImageExtractor()
 
     async def ingest_pdf(self, file: UploadFile) -> dict:
         start = time.perf_counter()
@@ -31,6 +33,12 @@ class IngestionService:
 
         all_docs = [*parsed.text_chunks, *parsed.table_chunks, *parsed.image_chunks]
         self.vector_manager.add_documents(all_docs)
+        
+        # Extract and save raw images
+        extracted_images = self.image_extractor.extract_images(
+            pdf_path=tmp_path,
+            source_name=file.filename or tmp_path.name,
+        )
 
         elapsed = time.perf_counter() - start
         return {
@@ -38,6 +46,7 @@ class IngestionService:
             "text_chunks": len(parsed.text_chunks),
             "table_chunks": len(parsed.table_chunks),
             "image_summary_chunks": len(parsed.image_chunks),
+            "images_extracted": len(extracted_images),
             "total_chunks": len(all_docs),
             "processing_time_seconds": round(elapsed, 3),
         }

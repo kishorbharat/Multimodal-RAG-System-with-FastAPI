@@ -3,10 +3,13 @@ from __future__ import annotations
 import time
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 
 from src.api.schemas import (
     DocumentsResponse,
     HealthResponse,
+    ImagesListResponse,
+    ImageMetadata,
     IngestResponse,
     QueryRequest,
     QueryResponse,
@@ -63,4 +66,43 @@ def documents() -> DocumentsResponse:
         documents=stats["documents"],
         indexed_documents=stats["indexed_documents"],
         index_size=stats["indexed_chunks"],
+    )
+
+
+@router.get("/images", response_model=ImagesListResponse)
+def list_images(filename: str | None = None) -> ImagesListResponse:
+    """List all extracted images from ingested PDFs.
+    
+    Query parameters:
+    - filename: Optional, filter by PDF filename (e.g., "AIS_197-1_BNCAP.pdf")
+    
+    Returns array of image metadata with IDs that can be used with /images/{image_id} endpoint.
+    """
+    images = system.image_extractor.list_images(filename=filename)
+    return ImagesListResponse(images=[ImageMetadata(**img) for img in images], total=len(images))
+
+
+@router.get("/images/{image_id}")
+def get_image(image_id: str):
+    """Retrieve a specific image by ID as binary data.
+    
+    Use /images endpoint first to get available image IDs.
+    Returns: Image file (PNG, JPG, or JPEG format)
+    """
+    image_data = system.image_extractor.get_image_by_id(image_id)
+    if not image_data:
+        raise HTTPException(status_code=404, detail=f"Image '{image_id}' not found.")
+    
+    # Determine media type from image_id
+    if ".jpg" in image_id or "_jpg" in image_id:
+        media_type = "image/jpeg"
+    elif ".jpeg" in image_id or "_jpeg" in image_id:
+        media_type = "image/jpeg"
+    else:
+        media_type = "image/png"
+    
+    return StreamingResponse(
+        iter([image_data]),
+        media_type=media_type,
+        headers={"Content-Disposition": f"attachment; filename={image_id}.png"},
     )

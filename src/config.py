@@ -9,6 +9,19 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def _resolve_device() -> str:
+    """Return 'cuda', 'mps', or 'cpu' based on what hardware is available."""
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return "cuda"
+        if torch.backends.mps.is_available():
+            return "mps"
+    except ImportError:
+        pass
+    return "cpu"
+
+
 @dataclass(frozen=True)
 class Settings:
     app_name: str = "Multimodal RAG System"
@@ -27,6 +40,9 @@ class Settings:
     retrieval_k: int = int(os.getenv("RETRIEVAL_K", "6"))
     enable_ocr_fallback: bool = os.getenv("ENABLE_OCR_FALLBACK", "true").lower() == "true"
     ocr_dpi: int = int(os.getenv("OCR_DPI", "220"))
+    # Device for all torch/transformers models: auto-detected unless DEVICE is set.
+    # Set DEVICE=cuda in your .env (or Colab runtime) to force GPU.
+    device: str = os.getenv("DEVICE") or _resolve_device()
 
 
 settings = Settings()

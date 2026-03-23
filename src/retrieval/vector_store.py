@@ -11,7 +11,10 @@ from src.config import settings
 
 class VectorStoreManager:
     def __init__(self) -> None:
-        self.embeddings = HuggingFaceEmbeddings(model_name=settings.embedding_model)
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=settings.embedding_model,
+            model_kwargs={"device": settings.device},
+        )
         self.store = Chroma(
             collection_name=settings.collection_name,
             embedding_function=self.embeddings,
