@@ -233,18 +233,43 @@ FastAPI auto-generated OpenAPI/Swagger UI.
 
 ## 11. Screenshots
 
-Screenshot files are not committed yet. Add them under `screenshots/` before final submission.
+### Swagger UI
 
-Required evidence:
+`/docs` page showing all available endpoints.
 
-1. `swagger-ui.png` - `/docs` page showing endpoints
-2. `ingest-success.png` - successful `POST /ingest` response
-3. `query-text.png` - query result grounded in text chunks
-4. `query-table.png` - query result grounded in table chunks
-5. `query-image.png` - query result grounded in image-summary chunks
-6. `health-response.png` - `GET /health` response with indexed counts
+![Swagger UI](screenshots/swagger-ui.png)
 
-See [screenshots/README.md](/workspaces/Multimodal-RAG-System-with-FastAPI/screenshots/README.md) for the screenshot checklist.
+### Successful Ingestion
+
+`POST /ingest` call with a multimodal PDF and successful response.
+
+![Successful Ingestion](screenshots/ingest-success.png)
+
+### Text Query Result
+
+Query response demonstrating retrieval from text-based chunks.
+
+![Text Query Result](screenshots/query-text.png)
+
+### Table Query Result
+
+Query response demonstrating retrieval from table-based chunks.
+
+![Table Query Result](screenshots/query-table.png)
+
+### Image Query Result
+
+Query response demonstrating retrieval from image-summary chunks.
+
+![Image Query Result](screenshots/query-image.png)
+
+### Health Endpoint
+
+`GET /health` response showing indexed document count and index size.
+
+![Health Endpoint](screenshots/health-response.png)
+
+See [screenshots/README.md](screenshots/README.md) for the screenshot checklist.
 
 ## 12. Limitations & Future Work
 
